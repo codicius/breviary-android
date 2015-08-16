@@ -24,13 +24,16 @@ public class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val datePicker = findViewById(R.id.datePicker) as DatePicker
         val spinner = findViewById(R.id.spinner) as Spinner
         val adapter = ArrayAdapter<String>(this, R.layout.spinner_item, offices)
         spinner.setAdapter(adapter)
 
+        val now = Calendar.getInstance()
+        spinner.setSelection(selectPrayer(now))
+
         val button = findViewById(R.id.button) as Button
         button.setOnClickListener {
-            val datePicker = findViewById(R.id.datePicker) as DatePicker
             launchBreviary(datePicker, spinner.getSelectedItem() as String)
         }
     }
@@ -54,4 +57,12 @@ public class MainActivity : AppCompatActivity() {
 
         return super.onOptionsItemSelected(item)
     }
+
+    fun selectPrayer(time: Calendar): Int =
+        when (time.get(Calendar.HOUR_OF_DAY)) {
+            in 5..11 -> 0
+            in 12..17 -> 1
+            in 18..20 -> 2
+            else -> 3
+        }
 }
